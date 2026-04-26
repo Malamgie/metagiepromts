@@ -489,7 +489,7 @@
         // ====================================================================================
         // IMPORTANT: PLACE YOUR REAL KEY HERE
         // ====================================================================================
-        const GEMINI_API_KEY = "AIzaSyCU7FPHeHJL1I464Bs3aCr98Id5Dg3v71w"; // <-- PASTE YOUR KEY INSIDE THESE QUOTES
+        const GEMINI_API_KEY = ""; // <-- PASTE YOUR KEY INSIDE THESE QUOTES
         // ====================================================================================
         
         const state = {
@@ -696,12 +696,13 @@
                     'gemini-1.5-flash'     
                 ];
 
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 25000); 
-
                 for (let i = 0; i < models.length; i++) {
                     const modelName = models[i];
                     const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${GEMINI_API_KEY}`;
+                    
+                    // Moved AbortController inside loop with 60 second timeout for slow networks
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(new Error("Network timeout: 60s")), 60000); 
                     
                     try {
                         const response = await fetch(endpoint, {
@@ -717,10 +718,10 @@
                             signal: controller.signal
                         });
 
+                        clearTimeout(timeoutId);
+
                         if (response.ok) {
-                            clearTimeout(timeoutId);
                             const data = await response.json();
-                            
                             if (data.candidates && data.candidates[0]) {
                                 let resultText = data.candidates[0].content.parts[0].text;
                                 resultText = resultText.replace(/^```(json)?\n?/gm, '').replace(/```$/gm, '').trim();
@@ -745,10 +746,18 @@
                             throw new Error(`API returned ${response.status}: ${errorDetails}`);
                         }
                     } catch (error) {
+                        clearTimeout(timeoutId);
+                        
+                        // Check if the error is due to our slow network abort timeout
+                        const isTimeout = error.name === 'AbortError' || (error.message && error.message.includes('timeout'));
+
                         if (i === models.length - 1) {
-                            clearTimeout(timeoutId);
-                            console.error("Crash details:", error);
-                            alert("⚠️ DIAGNOSTIC ERROR:\n\n" + error.message);
+                            if (isTimeout) {
+                                alert("⚠️ DIAGNOSTIC ERROR:\n\nNetwork Timeout. Your internet connection is very slow (taking over 60 seconds) and the request timed out. Please try again or switch to a faster network.");
+                            } else {
+                                console.error("Crash details:", error);
+                                alert("⚠️ DIAGNOSTIC ERROR:\n\n" + (error.message || "Unknown error occurred."));
+                            }
                             return null;
                         }
                     }
