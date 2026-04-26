@@ -69,105 +69,23 @@
     </script>
 
     <style>
-        /* Custom Styles & Utilities */
-        body {
-            background-color: #0B0F19;
-            color: #f3f4f6;
-            overflow-x: hidden;
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        .glass-panel {
-            background: rgba(17, 24, 39, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .glass-card {
-            background: rgba(31, 41, 55, 0.4);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
-        }
-
-        .glass-card:hover {
-            background: rgba(31, 41, 55, 0.7);
-            border-color: rgba(99, 102, 241, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .gradient-text {
-            background: linear-gradient(to right, #818cf8, #c084fc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .bg-gradient-brand {
-            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0B0F19; 
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #374151; 
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #4B5563; 
-        }
-
-        /* Step Indicator */
-        .step-indicator {
-            transition: all 0.3s ease;
-        }
-        .step-active {
-            background: #6366f1;
-            color: white;
-            border-color: #6366f1;
-        }
-        .step-completed {
-            background: rgba(99, 102, 241, 0.2);
-            color: #818cf8;
-            border-color: #6366f1;
-        }
-
-        /* Range Slider */
-        input[type=range] {
-            -webkit-appearance: none;
-            width: 100%;
-            background: transparent;
-        }
-        input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            height: 16px;
-            width: 16px;
-            border-radius: 50%;
-            background: #818cf8;
-            cursor: pointer;
-            margin-top: -6px;
-            box-shadow: 0 0 10px rgba(129, 140, 248, 0.5);
-        }
-        input[type=range]::-webkit-slider-runnable-track {
-            width: 100%;
-            height: 4px;
-            cursor: pointer;
-            background: #374151;
-            border-radius: 2px;
-        }
-
-        /* Loader */
-        .loader-dots div {
-            animation-timing-function: cubic-bezier(0, 1, 1, 0);
-        }
+        body { background-color: #0B0F19; color: #f3f4f6; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+        .glass-panel { background: rgba(17, 24, 39, 0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); }
+        .glass-card { background: rgba(31, 41, 55, 0.4); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.3s ease; }
+        .glass-card:hover { background: rgba(31, 41, 55, 0.7); border-color: rgba(99, 102, 241, 0.3); transform: translateY(-2px); }
+        .gradient-text { background: linear-gradient(to right, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .bg-gradient-brand { background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0B0F19; }
+        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4B5563; }
+        .step-indicator { transition: all 0.3s ease; }
+        .step-active { background: #6366f1; color: white; border-color: #6366f1; }
+        .step-completed { background: rgba(99, 102, 241, 0.2); color: #818cf8; border-color: #6366f1; }
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; background: #818cf8; cursor: pointer; margin-top: -6px; box-shadow: 0 0 10px rgba(129, 140, 248, 0.5); }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: #374151; border-radius: 2px; }
+        .loader-dots div { animation-timing-function: cubic-bezier(0, 1, 1, 0); }
         .loader-dots div:nth-child(1) { left: 8px; animation: loader-dots1 0.6s infinite; }
         .loader-dots div:nth-child(2) { left: 8px; animation: loader-dots2 0.6s infinite; }
         .loader-dots div:nth-child(3) { left: 32px; animation: loader-dots2 0.6s infinite; }
@@ -212,7 +130,6 @@
 
                 <!-- Tools & Toggles -->
                 <div class="flex items-center gap-4">
-                    <!-- Multi-Model Selector -->
                     <div class="hidden sm:flex items-center bg-slate-800/80 rounded-lg p-1 border border-slate-700">
                         <button class="px-2 py-1 bg-slate-700 rounded text-xs font-medium text-white shadow">Gemini</button>
                         <button class="px-2 py-1 text-xs font-medium text-slate-500 cursor-not-allowed opacity-50 relative group">
@@ -221,7 +138,6 @@
                         </button>
                     </div>
 
-                    <!-- Nigeria Toggle -->
                     <div class="flex items-center gap-2" title="Tailor output for Nigerian context">
                         <span class="text-xl">🇳🇬</span>
                         <button id="ng-toggle" class="w-10 h-5 bg-slate-700 rounded-full relative transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 focus:ring-offset-slate-900" onclick="app.toggleNigeriaMode()">
@@ -229,13 +145,11 @@
                         </button>
                     </div>
 
-                    <!-- Saved Button -->
                     <button onclick="app.navigate('saved')" class="p-2 text-slate-400 hover:text-brand-400 transition-colors relative" title="Saved Prompts">
                         <i class="ph ph-bookmark-simple text-xl"></i>
                         <span id="saved-badge" class="absolute top-1 right-1 w-2 h-2 bg-brand-500 rounded-full hidden"></span>
                     </button>
 
-                    <!-- Mobile Menu Btn -->
                     <button class="md:hidden p-2 text-slate-300 hover:text-white" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
                         <i class="ph ph-list text-2xl"></i>
                     </button>
@@ -244,7 +158,7 @@
         </div>
 
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden border-t border-white/10 bg-slate-900/95 backdrop-blur-xl absolute w-full">
+        <div id="mobile-menu" class="hidden md:hidden border-t border-white/10 bg-slate-900/95 backdrop-blur-xl absolute w-full z-50">
             <div class="px-4 pt-2 pb-4 space-y-1">
                 <button onclick="app.navigate('guided'); document.getElementById('mobile-menu').classList.add('hidden')" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800">Guided Builder</button>
                 <button onclick="app.navigate('advanced'); document.getElementById('mobile-menu').classList.add('hidden')" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800">Advanced Builder</button>
@@ -318,18 +232,15 @@
             </div>
 
             <div class="glass-panel rounded-2xl p-6 md:p-8 relative overflow-hidden">
-                <!-- Progress Bar -->
                 <div class="flex justify-between mb-8 relative">
                     <div class="absolute top-1/2 left-0 w-full h-0.5 bg-slate-700 -z-10 -translate-y-1/2"></div>
                     <div id="guided-progress" class="absolute top-1/2 left-0 h-0.5 bg-brand-500 -z-10 -translate-y-1/2 transition-all duration-300" style="width: 0%"></div>
-                    
                     <div class="step-indicator w-8 h-8 rounded-full border-2 border-slate-600 bg-slate-900 flex items-center justify-center text-sm font-bold step-active" id="step-btn-1">1</div>
                     <div class="step-indicator w-8 h-8 rounded-full border-2 border-slate-600 bg-slate-900 flex items-center justify-center text-sm font-bold" id="step-btn-2">2</div>
                     <div class="step-indicator w-8 h-8 rounded-full border-2 border-slate-600 bg-slate-900 flex items-center justify-center text-sm font-bold" id="step-btn-3">3</div>
                     <div class="step-indicator w-8 h-8 rounded-full border-2 border-slate-600 bg-slate-900 flex items-center justify-center text-sm font-bold" id="step-btn-4">4</div>
                 </div>
 
-                <!-- Steps Content -->
                 <div id="guided-step-1" class="guided-step space-y-4">
                     <h3 class="text-xl font-semibold text-white mb-4">What do you want the AI to do?</h3>
                     <div class="grid grid-cols-2 gap-3">
@@ -370,7 +281,6 @@
                     <textarea id="guided-details" rows="4" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-4 text-white placeholder-slate-500 focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none resize-none" placeholder="Provide extra context here..."></textarea>
                 </div>
 
-                <!-- Navigation Buttons -->
                 <div class="flex justify-between mt-8 pt-6 border-t border-slate-700/50">
                     <button id="guided-prev" class="px-5 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition-colors hidden" onclick="app.guidedPrev()">Back</button>
                     <div class="flex-grow"></div>
@@ -395,7 +305,6 @@
                         <label class="block text-sm font-medium text-slate-300 mb-2">Primary Goal & Role <span class="text-red-400">*</span></label>
                         <input type="text" id="adv-goal" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-3 text-white focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none" placeholder="e.g., Act as a Senior Copywriter and write a landing page...">
                     </div>
-                    
                     <div class="grid md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-slate-300 mb-2">Target Audience</label>
@@ -406,17 +315,14 @@
                             <input type="text" id="adv-tone" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-3 text-white focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none" placeholder="e.g., Authoritative but approachable">
                         </div>
                     </div>
-
                     <div>
                         <label class="block text-sm font-medium text-slate-300 mb-2">Format & Constraints</label>
                         <input type="text" id="adv-format" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-3 text-white focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none" placeholder="e.g., Output as Markdown, use 3 sections, max 500 words">
                     </div>
-
                     <div>
                         <label class="block text-sm font-medium text-slate-300 mb-2">Context & Background Info</label>
                         <textarea id="adv-context" rows="4" class="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-3 text-white focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none resize-y" placeholder="Paste source material, product details, or specific instructions here..."></textarea>
                     </div>
-
                     <button onclick="app.generateFromAdvanced()" class="w-full bg-gradient-brand hover:opacity-90 text-white py-4 rounded-xl font-bold text-lg transition-all shadow-lg shadow-brand-500/20 flex justify-center items-center gap-2">
                         <i class="ph-bold ph-lightning"></i> Generate Optimized Prompt
                     </button>
@@ -447,10 +353,7 @@
                 <h2 class="text-3xl font-display font-bold text-white">Prompt Library</h2>
                 <p class="text-slate-400 mt-2">Ready-to-use templates for common tasks.</p>
             </div>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="library-container">
-                <!-- Populated by JS -->
-            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="library-container"></div>
         </div>
 
         <!-- === VIEW: SAVED PROMPTS === -->
@@ -461,10 +364,7 @@
                     <p class="text-slate-400 mt-2">Your personal collection stored locally.</p>
                 </div>
             </div>
-            
-            <div id="saved-container" class="space-y-4">
-                <!-- Populated by JS -->
-            </div>
+            <div id="saved-container" class="space-y-4"></div>
         </div>
 
         <!-- === VIEW: OUTPUT PANEL === -->
@@ -520,9 +420,6 @@
                         </div>
                         <div class="p-4 relative group">
                             <textarea id="final-prompt-text" class="w-full bg-transparent text-slate-200 font-mono text-sm resize-y outline-none min-h-[250px] leading-relaxed" readonly></textarea>
-                            <div class="absolute inset-0 bg-slate-900/5 backdrop-blur-[1px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none flex items-center justify-center">
-                                <!-- Subtle hover effect -->
-                            </div>
                         </div>
                     </div>
 
@@ -537,16 +434,12 @@
                     <div class="glass-panel rounded-2xl h-full border border-purple-500/20 flex flex-col">
                         <div class="bg-slate-800/80 px-4 py-3 border-b border-white/5">
                             <span class="font-medium text-white flex items-center gap-2">
-                                <i class="ph-bold ph-eye text-purple-400"></i> Expected AI Output Preview
+                                <i class="ph-bold ph-eye text-purple-400"></i> Expected AI Output
                             </span>
                         </div>
                         <div class="p-4 flex-grow bg-slate-900/40 relative overflow-hidden">
-                            <!-- Chat bubble style -->
                             <div class="bg-slate-800 border border-slate-700 rounded-2xl rounded-tl-none p-4 shadow-md max-h-[400px] overflow-y-auto custom-scrollbar">
                                 <p id="preview-text" class="text-sm text-slate-300 leading-relaxed whitespace-pre-wrap font-sans"></p>
-                            </div>
-                            <div class="absolute bottom-4 right-4 text-xs text-slate-500 flex items-center gap-1">
-                                <i class="ph-fill ph-robot"></i> Simulated Output
                             </div>
                         </div>
                     </div>
@@ -559,7 +452,6 @@
                 </button>
             </div>
         </div>
-
     </main>
 
     <!-- Footer -->
@@ -591,12 +483,14 @@
     </div>
 
     <!-- Toast Container -->
-    <div id="toast-container" class="fixed bottom-6 right-6 z-[101] flex flex-col gap-2"></div>
+    <div id="toast-container" class="fixed bottom-6 right-6 z-[101] flex flex-col gap-2 pointer-events-none"></div>
 
-    <!-- Application Logic -->
     <script>
-        // --- 1. CONFIG & STATE ---
-        const GEMINI_API_KEY = "AIzaSyD69t3Q-adiItjjFG-l_QNvq68PHt77SWw"; // Required strict integration
+        // ====================================================================================
+        // 🚨 IMPORTANT: REPLACE THE KEY BELOW WITH YOUR REAL API KEY FROM aistudio.google.com
+        // ====================================================================================
+        const GEMINI_API_KEY = "AIzaSyD69t3Q-adiItjjFG-l_QNvq68PHt77SWw"; 
+        // ====================================================================================
         
         const state = {
             currentView: 'landing',
@@ -617,9 +511,8 @@
             { id: 4, title: 'Cold Email Outreach', icon: 'ph-envelope-simple', category: 'Business', text: 'Write a cold email to [Target Role] offering [Service/Product]. Keep it under 150 words. Focus on a specific pain point they likely face. Do NOT sound overly salesy. Use a soft CTA asking for a quick 5-min chat, not a hard close.' }
         ];
 
-        // --- 2. PWA SETUP (Single File Inline Approach) ---
+        // --- 2. PWA SETUP ---
         function initPWA() {
-            // Manifest Injection
             const manifest = {
                 name: "MetaGie Prompts",
                 short_name: "MetaGie",
@@ -636,27 +529,12 @@
             };
             const manifestString = JSON.stringify(manifest);
             const manifestUrl = 'data:application/manifest+json;charset=utf-8,' + encodeURIComponent(manifestString);
+            
+            // Remove old manifest if it exists
+            const oldManifest = document.querySelector('link[rel="manifest"]');
+            if (oldManifest) oldManifest.remove();
+            
             document.head.insertAdjacentHTML('beforeend', `<link rel="manifest" href="${manifestUrl}">`);
-
-            // Service Worker Injection (Blob)
-            const swCode = `
-                const CACHE_NAME = 'metagie-v1';
-                self.addEventListener('install', e => e.waitUntil(self.skipWaiting()));
-                self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
-                self.addEventListener('fetch', e => {
-                    if (e.request.method !== 'GET') return;
-                    e.respondWith(
-                        fetch(e.request).catch(() => caches.match(e.request))
-                    );
-                });
-            `;
-            const swBlob = new Blob([swCode], { type: 'application/javascript' });
-            const swUrl = URL.createObjectURL(swBlob);
-            if ('serviceWorker' in navigator) {
-                window.addEventListener('load', () => {
-                    navigator.serviceWorker.register(swUrl).catch(console.error);
-                });
-            }
         }
 
         // --- 3. CORE APP LOGIC ---
@@ -667,7 +545,6 @@
                 this.updateSavedBadge();
                 initPWA();
                 
-                // Check URL for shared prompt
                 const urlParams = new URLSearchParams(window.location.search);
                 const sharedPrompt = urlParams.get('p');
                 if (sharedPrompt) {
@@ -683,10 +560,7 @@
             },
 
             navigate(viewId) {
-                // Hide all views
                 document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
-                
-                // Show target view
                 const target = document.getElementById(`view-${viewId}`);
                 if (target) {
                     target.classList.remove('hidden');
@@ -694,8 +568,6 @@
                     state.currentView = viewId;
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
-
-                // Update nav styling
                 document.querySelectorAll('.nav-btn').forEach(btn => {
                     if (btn.dataset.target === viewId) {
                         btn.classList.add('bg-slate-700', 'text-white');
@@ -705,7 +577,6 @@
                         btn.classList.add('text-slate-300');
                     }
                 });
-
                 if (viewId === 'saved') this.renderSaved();
             },
 
@@ -732,7 +603,7 @@
 
             showToast(message, type = 'info') {
                 const toast = document.createElement('div');
-                toast.className = `px-4 py-3 rounded-lg shadow-lg text-sm font-medium text-white flex items-center gap-2 transform translate-y-10 opacity-0 transition-all duration-300 z-[102]`;
+                toast.className = `px-4 py-3 rounded-lg shadow-lg text-sm font-medium text-white flex items-center gap-2 transform translate-y-10 opacity-0 transition-all duration-300 pointer-events-auto`;
                 
                 if (type === 'success') toast.classList.add('bg-green-600');
                 else if (type === 'error') toast.classList.add('bg-red-600');
@@ -743,16 +614,11 @@
                 
                 document.getElementById('toast-container').appendChild(toast);
                 
-                // Animate in
-                setTimeout(() => {
-                    toast.classList.remove('translate-y-10', 'opacity-0');
-                }, 10);
-
-                // Remove after 3s
+                setTimeout(() => toast.classList.remove('translate-y-10', 'opacity-0'), 10);
                 setTimeout(() => {
                     toast.classList.add('opacity-0');
                     setTimeout(() => toast.remove(), 300);
-                }, 3000);
+                }, 5000);
             },
 
             setLoading(isLoading, text = "Engineering Prompt...") {
@@ -768,11 +634,8 @@
                 }
             },
 
-            // --- GUIDED BUILDER LOGIC ---
             selectGuidedOption(field, value) {
                 state.guided.data[field] = value;
-                
-                // Visual feedback
                 const stepDiv = document.getElementById(`guided-step-${state.guided.step}`);
                 stepDiv.querySelectorAll('.guided-opt').forEach(btn => {
                     btn.classList.remove('border-brand-500', 'bg-brand-500/10');
@@ -780,37 +643,26 @@
                         btn.classList.add('border-brand-500', 'bg-brand-500/10');
                     }
                 });
-
-                // Auto-advance if not custom
                 if (value !== 'Custom/Other' && field !== 'details') {
                     setTimeout(() => this.guidedNext(), 300);
                 } else if (value === 'Custom/Other' && field === 'goal') {
-                    // Show a custom input if needed, handled simply here by skipping to next and user clarifies in details
                     setTimeout(() => this.guidedNext(), 300);
                 }
             },
 
             guidedNext() {
-                // Save custom inputs if any
                 if (state.guided.step === 2) {
                     const customAud = document.getElementById('custom-audience').value;
                     if (customAud) state.guided.data.audience = customAud;
                 }
-
                 if (state.guided.step < 4) {
                     document.getElementById(`guided-step-${state.guided.step}`).classList.add('hidden');
                     document.getElementById(`step-btn-${state.guided.step}`).classList.replace('step-active', 'step-completed');
-                    
                     state.guided.step++;
-                    
                     document.getElementById(`guided-step-${state.guided.step}`).classList.remove('hidden');
                     document.getElementById(`step-btn-${state.guided.step}`).classList.add('step-active');
-                    
-                    // Update progress bar
                     document.getElementById('guided-progress').style.width = `${((state.guided.step - 1) / 3) * 100}%`;
-                    
                     document.getElementById('guided-prev').classList.remove('hidden');
-                    
                     if (state.guided.step === 4) {
                         document.getElementById('guided-next').classList.add('hidden');
                         document.getElementById('guided-submit').classList.remove('hidden');
@@ -822,26 +674,22 @@
                 if (state.guided.step > 1) {
                     document.getElementById(`guided-step-${state.guided.step}`).classList.add('hidden');
                     document.getElementById(`step-btn-${state.guided.step}`).classList.remove('step-active');
-                    
                     state.guided.step--;
-                    
                     document.getElementById(`guided-step-${state.guided.step}`).classList.remove('hidden');
                     document.getElementById(`step-btn-${state.guided.step}`).classList.replace('step-completed', 'step-active');
-                    
                     document.getElementById('guided-progress').style.width = `${((state.guided.step - 1) / 3) * 100}%`;
-                    
                     document.getElementById('guided-next').classList.remove('hidden');
                     document.getElementById('guided-submit').classList.add('hidden');
-                    
-                    if (state.guided.step === 1) {
-                        document.getElementById('guided-prev').classList.add('hidden');
-                    }
+                    if (state.guided.step === 1) document.getElementById('guided-prev').classList.add('hidden');
                 }
             },
 
-            // --- GENERATION & API LOGIC ---
+            // --- BULLETPROOF API FETCHER WITH DIAGNOSTICS ---
             async callGeminiAPI(systemPrompt) {
                 const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+                
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 25000); // 25s timeout
                 
                 try {
                     const response = await fetch(endpoint, {
@@ -851,22 +699,52 @@
                             contents: [{ parts: [{ text: systemPrompt }] }],
                             generationConfig: {
                                 temperature: 0.7,
-                                // We strictly request JSON format to parse UI components easily
                                 responseMimeType: "application/json",
                             }
-                        })
+                        }),
+                        signal: controller.signal
                     });
 
-                    if (!response.ok) throw new Error('API Request Failed');
+                    clearTimeout(timeoutId);
+
+                    if (!response.ok) {
+                        // Attempt to parse exactly why Google rejected it
+                        let errorDetails = "";
+                        try {
+                            const errData = await response.json();
+                            errorDetails = errData.error?.message || "Unknown API Error";
+                        } catch(e) {
+                            errorDetails = await response.text();
+                        }
+                        
+                        console.error("API Error Response:", errorDetails);
+
+                        if (response.status === 400) {
+                            throw new Error(`API KEY ERROR: Ensure you placed a real key from aistudio.google.com in the code. (${errorDetails})`);
+                        }
+                        if (response.status === 403) throw new Error("API Key is restricted or unauthorized.");
+                        
+                        throw new Error(`API returned ${response.status}: ${errorDetails}`);
+                    }
                     
                     const data = await response.json();
+                    
+                    if (!data.candidates || !data.candidates[0]) {
+                        throw new Error("No output generated. Content might have been blocked by Google's safety filters.");
+                    }
+
                     let resultText = data.candidates[0].content.parts[0].text;
+                    resultText = resultText.replace(/^```(json)?\n?/gm, '').replace(/```$/gm, '').trim();
+                    
                     return JSON.parse(resultText);
                     
                 } catch (error) {
-                    console.error("API Error:", error);
-                    this.setLoading(false);
-                    this.showToast("Failed to generate prompt. Please try again.", "error");
+                    clearTimeout(timeoutId);
+                    console.error("Crash details:", error);
+                    
+                    // Diagnostic Alert to force the user to see exactly what broke
+                    alert("⚠️ DIAGNOSTIC ERROR:\n\n" + error.message + "\n\n(If you see an API Key Error, you must change the GEMINI_API_KEY variable in the HTML file to a real key.)");
+                    
                     return null;
                 }
             },
@@ -878,26 +756,24 @@
                 const { goal, audience, tone, details: d } = state.guided.data;
                 if (!goal) return this.showToast("Please select a goal in step 1", "error");
 
-                this.setLoading(true, "Crafting guided prompt...");
-                
-                const ngContext = state.nigeriaMode ? "CRITICAL: Tailor the tone, context, and examples slightly towards a Nigerian audience (use relevant terminology, local context, or slight informal styling if applicable)." : "";
-                
-                const prompt = `You are an elite AI Prompt Engineer. Your task is to generate a highly optimized, structured prompt based on these inputs:
-                - Goal: ${goal}
-                - Target Audience: ${audience || 'General'}
-                - Tone: ${tone || 'Standard'}
-                - Extra Details/Constraints: ${d || 'None'}
-                ${ngContext}
-                
-                Return a JSON object with EXACTLY these keys:
-                "optimized_prompt": The final, highly effective prompt text that the user will copy. Use clear structures (Role, Task, Constraints, Format).
-                "preview": A simulated short paragraph of what an AI might actually output if given this prompt.
-                "explanation": A brief 1-sentence explanation of why you structured the prompt this way.`;
+                try {
+                    this.setLoading(true, "Crafting guided prompt...");
+                    
+                    const ngContext = state.nigeriaMode ? "CRITICAL: Tailor the tone, context, and examples slightly towards a Nigerian audience." : "";
+                    const prompt = `You are an elite AI Prompt Engineer. Generate a highly optimized, structured prompt:
+                    - Goal: ${goal}
+                    - Target Audience: ${audience || 'General'}
+                    - Tone: ${tone || 'Standard'}
+                    - Extra Details: ${d || 'None'}
+                    ${ngContext}
+                    
+                    Return a pure JSON object (NO markdown) with EXACTLY these keys: "optimized_prompt" (the final text), "preview" (simulated AI response), "explanation" (1-sentence reasoning).`;
 
-                const result = await this.callGeminiAPI(prompt);
-                this.setLoading(false);
-                
-                if (result) this.displayOutput(result);
+                    const result = await this.callGeminiAPI(prompt);
+                    if (result) this.displayOutput(result);
+                } finally {
+                    this.setLoading(false);
+                }
             },
 
             async generateFromAdvanced() {
@@ -909,50 +785,49 @@
 
                 if (!goal) return this.showToast("Primary Goal is required", "error");
 
-                this.setLoading(true, "Compiling advanced parameters...");
+                try {
+                    this.setLoading(true, "Compiling advanced parameters...");
+                    const ngContext = state.nigeriaMode ? "CRITICAL: Incorporate Nigerian context or audience considerations." : "";
+                    
+                    const prompt = `You are an elite AI Prompt Engineer. Create a highly optimized prompt from these parameters:
+                    - Goal: ${goal}
+                    - Audience: ${audience}
+                    - Tone: ${tone}
+                    - Constraints: ${format}
+                    - Context: ${context}
+                    ${ngContext}
+                    
+                    Return a pure JSON object (NO markdown) with EXACTLY these keys: "optimized_prompt" (the final text), "preview" (simulated AI response), "explanation" (1-sentence reasoning).`;
 
-                const ngContext = state.nigeriaMode ? "CRITICAL: Incorporate Nigerian context, phrasing, or audience considerations where appropriate." : "";
-
-                const prompt = `You are an elite AI Prompt Engineer. Create a highly optimized, professional prompt from these raw parameters:
-                - Primary Goal: ${goal}
-                - Audience: ${audience}
-                - Tone/Style: ${tone}
-                - Format/Constraints: ${format}
-                - Context/Background: ${context}
-                ${ngContext}
-                
-                Return a JSON object with EXACTLY these keys:
-                "optimized_prompt": The robust, ready-to-use prompt text. Use clear headings if needed (e.g., [Role], [Context], [Task]).
-                "preview": A simulated short excerpt of the expected AI response.
-                "explanation": A brief tactical note on why this structure works best.`;
-
-                const result = await this.callGeminiAPI(prompt);
-                this.setLoading(false);
-                
-                if (result) this.displayOutput(result);
+                    const result = await this.callGeminiAPI(prompt);
+                    if (result) this.displayOutput(result);
+                } finally {
+                    this.setLoading(false);
+                }
             },
 
             async improvePrompt() {
                 const input = document.getElementById('improver-input').value;
                 if (!input.trim()) return this.showToast("Please paste a prompt to improve", "error");
 
-                this.setLoading(true, "Analyzing and rewriting prompt...");
+                try {
+                    this.setLoading(true, "Analyzing and rewriting prompt...");
+                    const ngContext = state.nigeriaMode ? "Adapt the resulting prompt to resonate well within a Nigerian context." : "";
 
-                const ngContext = state.nigeriaMode ? "Also, adapt the resulting prompt to resonate well within a Nigerian context." : "";
+                    const prompt = `You are an elite AI Prompt Engineer. Rewrite this weak prompt to be highly specific, structured, and effective:
+                    Original Prompt: "${input}"
+                    ${ngContext}
+                    
+                    Return a pure JSON object (NO markdown) with EXACTLY these keys: "optimized_prompt" (the improved text), "preview" (simulated AI response), "explanation" (what you fixed).`;
 
-                const prompt = `You are an elite AI Prompt Engineer. A user has provided a weak or basic prompt. Rewrite it to be highly specific, structured, and effective.
-                Original Prompt: "${input}"
-                ${ngContext}
-                
-                Return a JSON object with EXACTLY these keys:
-                "optimized_prompt": The newly improved, robust prompt.
-                "preview": A simulated short example of what an AI would output.
-                "explanation": A brief note explaining what was missing in the original and how you fixed it.`;
-
-                const result = await this.callGeminiAPI(prompt);
-                this.setLoading(false);
-                
-                if (result) this.displayOutput(result);
+                    const result = await this.callGeminiAPI(prompt);
+                    if (result) this.displayOutput(result);
+                } catch (e) {
+                    console.error("Unknown Execution Error:", e);
+                    this.showToast("Something went completely wrong. Try refreshing.", "error");
+                } finally {
+                    this.setLoading(false);
+                }
             },
 
             regenerate() {
@@ -962,42 +837,43 @@
                 else this.showToast("Cannot regenerate from here.", "error");
             },
 
-            // --- OUTPUT & SCORING ---
+            // --- OUTPUT & UI UPDATES ---
             displayOutput(data) {
-                state.currentPromptData = data;
-                
-                document.getElementById('final-prompt-text').value = data.optimized_prompt;
-                document.getElementById('preview-text').textContent = data.preview;
-                
-                if (data.explanation) {
-                    document.getElementById('explanation-block').classList.remove('hidden');
-                    document.getElementById('prompt-explanation').textContent = data.explanation;
-                } else {
-                    document.getElementById('explanation-block').classList.add('hidden');
+                try {
+                    state.currentPromptData = data;
+                    
+                    document.getElementById('final-prompt-text').value = data.optimized_prompt || "Failed to generate text. Try again.";
+                    document.getElementById('preview-text').textContent = data.preview || "No preview generated.";
+                    
+                    if (data.explanation) {
+                        document.getElementById('explanation-block').classList.remove('hidden');
+                        document.getElementById('prompt-explanation').textContent = data.explanation;
+                    } else {
+                        document.getElementById('explanation-block').classList.add('hidden');
+                    }
+
+                    this.calculateAndAnimateScores(data.optimized_prompt || "");
+                    
+                    const shareUrl = `?p=${encodeURIComponent(data.optimized_prompt || "")}`;
+                    window.history.pushState({}, '', shareUrl);
+
+                    this.navigate('output');
+                } catch (e) {
+                    console.error("Display Error:", e);
+                    this.showToast("Error rendering output.", "error");
                 }
-
-                this.calculateAndAnimateScores(data.optimized_prompt);
-                
-                // Update URL for sharing without reloading
-                const shareUrl = `?p=${encodeURIComponent(data.optimized_prompt)}`;
-                window.history.pushState({}, '', shareUrl);
-
-                this.navigate('output');
             },
 
             calculateAndAnimateScores(text) {
-                // Heuristic scoring logic
+                if (!text) text = "";
                 let clarity = 60, specificity = 50, effectiveness = 50;
                 const words = text.split(/\s+/).length;
                 const lower = text.toLowerCase();
 
-                // Word count logic
                 if (words >= 30 && words <= 200) clarity += 30;
-                else if (words > 200) clarity += 10; // maybe too long
-                
+                else if (words > 200) clarity += 10; 
                 if (words > 50) specificity += 20;
 
-                // Keyword heuristics
                 const directives = ['act as', 'role', 'you are', 'context', 'background'];
                 const constraints = ['limit', 'max', 'only', 'do not', 'avoid', 'format', 'json', 'markdown', 'must', 'tone'];
                 
@@ -1006,27 +882,22 @@
                 
                 let consCount = constraints.filter(c => lower.includes(c)).length;
                 effectiveness += (consCount * 12);
-                if (lower.includes('[')) effectiveness += 10; // Use of variables/brackets
+                if (lower.includes('[')) effectiveness += 10; 
 
-                // Cap at 99 (nobody's perfect)
                 clarity = Math.min(99, clarity);
                 specificity = Math.min(99, specificity);
                 effectiveness = Math.min(99, effectiveness);
 
-                // Reset UI
                 ['clarity', 'specificity', 'effectiveness'].forEach(id => {
                     document.getElementById(`score-${id}`).textContent = '0';
                     document.getElementById(`bar-${id}`).style.width = '0%';
                 });
 
-                // Animate UI
                 setTimeout(() => {
                     this.animateCounter('score-clarity', clarity);
                     document.getElementById('bar-clarity').style.width = `${clarity}%`;
-                    
                     this.animateCounter('score-specificity', specificity);
                     document.getElementById('bar-specificity').style.width = `${specificity}%`;
-                    
                     this.animateCounter('score-effectiveness', effectiveness);
                     document.getElementById('bar-effectiveness').style.width = `${effectiveness}%`;
                 }, 300);
@@ -1052,7 +923,6 @@
                     await navigator.clipboard.writeText(text);
                     this.showToast('Prompt copied to clipboard!', 'success');
                 } catch (err) {
-                    // Fallback for older browsers
                     const textArea = document.createElement("textarea");
                     textArea.value = text;
                     document.body.appendChild(textArea);
@@ -1074,18 +944,11 @@
             saveCurrentPrompt() {
                 if (!state.currentPromptData) return;
                 const text = state.currentPromptData.optimized_prompt;
-                
-                // Check if already saved
-                if (state.savedPrompts.some(p => p.text === text)) {
-                    return this.showToast('Prompt already saved', 'info');
-                }
-
+                if (state.savedPrompts.some(p => p.text === text)) return this.showToast('Prompt already saved', 'info');
                 const title = text.substring(0, 40) + "...";
                 const date = new Date().toLocaleDateString();
-                
                 state.savedPrompts.unshift({ id: Date.now(), title, text, date });
                 localStorage.setItem('metagie_saved', JSON.stringify(state.savedPrompts));
-                
                 this.updateSavedBadge();
                 this.showToast('Prompt saved locally', 'success');
             },
@@ -1116,7 +979,6 @@
                     container.innerHTML = `<div class="text-center py-10 text-slate-500 glass-panel rounded-xl border border-dashed border-slate-700">No saved prompts yet. Generate and save one!</div>`;
                     return;
                 }
-
                 container.innerHTML = state.savedPrompts.map(p => `
                     <div class="glass-panel rounded-xl p-4 flex flex-col md:flex-row justify-between gap-4 border border-white/5 hover:border-brand-500/50 transition-colors">
                         <div class="flex-grow overflow-hidden">
@@ -1162,9 +1024,7 @@
             }
         };
 
-        // Initialize App on load
         window.addEventListener('DOMContentLoaded', () => app.init());
-
     </script>
 </body>
 </html>
