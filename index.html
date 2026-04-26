@@ -179,7 +179,7 @@
                       <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
                       <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
                     </span>
-                    Powered by Gemini 1.5 Flash 8B
+                    Powered by Auto-Scaling AI
                 </div>
                 <h1 class="text-4xl md:text-6xl font-display font-bold text-white mb-6 leading-tight">
                     Turn Any Idea Into a <br/>
@@ -489,7 +489,7 @@
         // ====================================================================================
         // IMPORTANT: PLACE YOUR REAL KEY HERE
         // ====================================================================================
-        const GEMINI_API_KEY = "AIzaSyCU7FPHeHJL1I464Bs3aCr98Id5Dg3v71w"; // <-- PASTE YOUR KEY INSIDE THESE QUOTES
+        const GEMINI_API_KEY = "YOUR_API_KEY_HERE"; // <-- PASTE YOUR KEY INSIDE THESE QUOTES
         // ====================================================================================
         
         const state = {
@@ -511,7 +511,7 @@
             { id: 4, title: 'Cold Email Outreach', icon: 'ph-envelope-simple', category: 'Business', text: 'Write a cold email to [Target Role] offering [Service/Product]. Keep it under 150 words. Focus on a specific pain point they likely face. Do NOT sound overly salesy. Use a soft CTA asking for a quick 5-min chat, not a hard close.' }
         ];
 
-        // --- 2. PWA SETUP ---
+        // --- PWA SETUP ---
         function initPWA() {
             const manifest = {
                 name: "MetaGie Prompts",
@@ -536,7 +536,7 @@
             document.head.insertAdjacentHTML('beforeend', `<link rel="manifest" href="${manifestUrl}">`);
         }
 
-        // --- 3. CORE APP LOGIC ---
+        // --- CORE APP LOGIC ---
         const app = {
             init() {
                 document.getElementById('year').textContent = new Date().getFullYear();
@@ -683,84 +683,110 @@
                 }
             },
 
-            // --- SMART FALLBACK API SYSTEM ---
+            // --- AUTO-DISCOVERY API ENGINE ---
             async callGeminiAPI(systemPrompt) {
                 if (!GEMINI_API_KEY || GEMINI_API_KEY === "YOUR_API_KEY_HERE" || GEMINI_API_KEY.trim() === "") {
-                    alert("⚠️ API KEY MISSING: Please edit the index.html file and paste your Google AI Studio API key into the GEMINI_API_KEY variable.");
+                    alert("⚠️ API KEY MISSING: Please edit the index.html file and paste your Google AI Studio API key.");
                     return null;
                 }
 
-                // Try the reliable free tier model first, then the flash fallback
-                const models = [
-                    'gemini-1.5-flash-8b', 
-                    'gemini-1.5-flash'     
-                ];
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 60000); // 60s timeout for slow networks
 
-                for (let i = 0; i < models.length; i++) {
-                    const modelName = models[i];
-                    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${GEMINI_API_KEY}`;
-                    
-                    // Moved AbortController inside loop with 60 second timeout for slow networks
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(new Error("Network timeout: 60s")), 60000); 
-                    
+                try {
+                    // STEP 1: Auto-discover available models dynamically so we NEVER hit a 404
+                    let availableModels = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.0-pro']; 
                     try {
+                        const modelsRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${GEMINI_API_KEY}`, { signal: controller.signal });
+                        if (modelsRes.ok) {
+                            const modelsData = await modelsRes.json();
+                            if (modelsData.models) {
+                                availableModels = modelsData.models
+                                    .filter(m => m.supportedGenerationMethods?.includes('generateContent') && m.name.includes('gemini'))
+                                    .map(m => m.name.replace('models/', ''));
+                                    
+                                // Prioritize flash models 
+                                availableModels.sort((a, b) => {
+                                    if (a.includes('flash') && !b.includes('flash')) return -1;
+                                    if (!a.includes('flash') && b.includes('flash')) return 1;
+                                    return 0;
+                                });
+                            }
+                        } else if (modelsRes.status === 403 || modelsRes.status === 400) {
+                            throw new Error("Invalid API Key");
+                        }
+                    } catch (e) {
+                        if (e.message === "Invalid API Key") {
+                            alert("⚠️ API KEY ERROR: Your API key is invalid or restricted. Please create a new one at aistudio.google.com");
+                            clearTimeout(timeoutId);
+                            return null;
+                        }
+                        console.warn("Could not auto-discover, using safe defaults.", e);
+                    }
+
+                    // STEP 2: Loop through valid models until one works without a Quota Error (429)
+                    let lastErrorMsg = "";
+                    let lastStatus = 0;
+
+                    for (const modelName of availableModels) {
+                        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${GEMINI_API_KEY}`;
+                        
                         const response = await fetch(endpoint, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
                                 contents: [{ parts: [{ text: systemPrompt }] }],
-                                generationConfig: {
-                                    temperature: 0.7,
-                                    responseMimeType: "application/json",
-                                }
+                                generationConfig: { temperature: 0.7, responseMimeType: "application/json" }
                             }),
                             signal: controller.signal
                         });
 
-                        clearTimeout(timeoutId);
-
                         if (response.ok) {
+                            clearTimeout(timeoutId);
                             const data = await response.json();
                             if (data.candidates && data.candidates[0]) {
                                 let resultText = data.candidates[0].content.parts[0].text;
                                 resultText = resultText.replace(/^```(json)?\n?/gm, '').replace(/```$/gm, '').trim();
                                 return JSON.parse(resultText);
                             }
-                        }
-
-                        // If NOT ok, and it's our last fallback model, alert the user
-                        if (!response.ok && i === models.length - 1) {
-                            let errorDetails = "";
+                        } else {
+                            lastStatus = response.status;
                             try {
                                 const errData = await response.json();
-                                errorDetails = errData.error?.message || "Unknown API Error";
+                                lastErrorMsg = errData.error?.message || "Unknown Error";
                             } catch(e) {
-                                errorDetails = await response.text();
+                                lastErrorMsg = await response.text();
                             }
-                            
-                            if (response.status === 429) {
-                                throw new Error(`Google Cloud Account Error (429): Quota exceeded. Your API key does not have free tier access for these models, or you have hit the rate limit.`);
-                            }
-                            
-                            throw new Error(`API returned ${response.status}: ${errorDetails}`);
-                        }
-                    } catch (error) {
-                        clearTimeout(timeoutId);
-                        
-                        // Check if the error is due to our slow network abort timeout
-                        const isTimeout = error.name === 'AbortError' || (error.message && error.message.includes('timeout'));
 
-                        if (i === models.length - 1) {
-                            if (isTimeout) {
-                                alert("⚠️ DIAGNOSTIC ERROR:\n\nNetwork Timeout. Your internet connection is very slow (taking over 60 seconds) and the request timed out. Please try again or switch to a faster network.");
-                            } else {
-                                console.error("Crash details:", error);
-                                alert("⚠️ DIAGNOSTIC ERROR:\n\n" + (error.message || "Unknown error occurred."));
+                            // If Key is bad, stop immediately
+                            if (lastStatus === 400 || lastStatus === 403) {
+                                break;
                             }
-                            return null;
+                            // If Quota (429) or Not Found (404), it will gracefully loop and try the next model
                         }
                     }
+
+                    // STEP 3: If we exit the loop, ALL models failed. Tell user exactly why.
+                    clearTimeout(timeoutId);
+                    
+                    if (lastStatus === 429) {
+                        alert("⚠️ QUOTA ERROR (429):\n\nYour Google account has 0 free tier quota in your region (Nigeria).\n\nTo fix this: Go to Google Cloud Console and link a billing account to your project. You will not be charged if you stay within free limits.");
+                    } else if (lastStatus === 400 || lastStatus === 403) {
+                        alert("⚠️ API KEY REJECTED:\n\nMake sure you pasted the exact key correctly on line 431 of the code.");
+                    } else {
+                        alert(`⚠️ API ERROR (${lastStatus}):\n\n${lastErrorMsg}`);
+                    }
+                    return null;
+
+                } catch (error) {
+                    clearTimeout(timeoutId);
+                    const isTimeout = error.name === 'AbortError' || (error.message && error.message.includes('timeout'));
+                    if (isTimeout) {
+                        alert("⚠️ NETWORK TIMEOUT:\n\nYour internet connection (currently around 1-5 KB/s) is too slow to reach Google's servers within 60 seconds. Please try again or switch to a faster network.");
+                    } else {
+                        alert("⚠️ SYSTEM ERROR:\n\n" + error.message);
+                    }
+                    return null;
                 }
             },
 
