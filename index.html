@@ -179,7 +179,7 @@
                       <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
                       <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
                     </span>
-                    Powered by Gemini 2.0 Flash
+                    Powered by Gemini 1.5 Flash 8B
                 </div>
                 <h1 class="text-4xl md:text-6xl font-display font-bold text-white mb-6 leading-tight">
                     Turn Any Idea Into a <br/>
@@ -489,7 +489,7 @@
         // ====================================================================================
         // IMPORTANT: PLACE YOUR REAL KEY HERE
         // ====================================================================================
-        const GEMINI_API_KEY = "AIzaSyCgacc8IvuIeg9DcS6JpccBZ4lEWjdAR-8"; 
+        const GEMINI_API_KEY = "AIzaSyCU7FPHeHJL1I464Bs3aCr98Id5Dg3v71w"; 
         // ====================================================================================
         
         const state = {
@@ -683,67 +683,74 @@
                 }
             },
 
-            // --- API LOGIC WITH NEW MODEL NAME ---
+            // --- SMART FALLBACK API SYSTEM ---
             async callGeminiAPI(systemPrompt) {
-                // FIXED: Updated model name to 'gemini-2.0-flash' which is the standard available model
-                const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
-                
+                // We will try the most reliable free tier model first.
+                // If it fails, we fall back to the standard flash model.
+                const models = [
+                    'gemini-1.5-flash-8b', // Best choice for free tier globally
+                    'gemini-1.5-flash'     // Backup
+                ];
+
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 25000); // 25s timeout
-                
-                try {
-                    const response = await fetch(endpoint, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            contents: [{ parts: [{ text: systemPrompt }] }],
-                            generationConfig: {
-                                temperature: 0.7,
-                                responseMimeType: "application/json",
+                const timeoutId = setTimeout(() => controller.abort(), 25000); 
+
+                for (let i = 0; i < models.length; i++) {
+                    const modelName = models[i];
+                    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${GEMINI_API_KEY}`;
+                    
+                    try {
+                        const response = await fetch(endpoint, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                contents: [{ parts: [{ text: systemPrompt }] }],
+                                generationConfig: {
+                                    temperature: 0.7,
+                                    responseMimeType: "application/json",
+                                }
+                            }),
+                            signal: controller.signal
+                        });
+
+                        if (response.ok) {
+                            clearTimeout(timeoutId);
+                            const data = await response.json();
+                            
+                            if (data.candidates && data.candidates[0]) {
+                                let resultText = data.candidates[0].content.parts[0].text;
+                                resultText = resultText.replace(/^```(json)?\n?/gm, '').replace(/```$/gm, '').trim();
+                                return JSON.parse(resultText);
                             }
-                        }),
-                        signal: controller.signal
-                    });
+                        }
 
-                    clearTimeout(timeoutId);
-
-                    if (!response.ok) {
-                        let errorDetails = "";
-                        try {
-                            const errData = await response.json();
-                            errorDetails = errData.error?.message || "Unknown API Error";
-                        } catch(e) {
-                            errorDetails = await response.text();
+                        // If response is NOT ok, and it's our last model to try, throw the error
+                        if (!response.ok && i === models.length - 1) {
+                            let errorDetails = "";
+                            try {
+                                const errData = await response.json();
+                                errorDetails = errData.error?.message || "Unknown API Error";
+                            } catch(e) {
+                                errorDetails = await response.text();
+                            }
+                            
+                            if (response.status === 429) {
+                                throw new Error(`Google Cloud Account Error: You have a strict limit of 0 on your API Key for these models. You must go to Google Cloud Console, find your project, and either enable Billing or create a brand new API key from AI Studio.`);
+                            }
+                            
+                            throw new Error(`API returned ${response.status}: ${errorDetails}`);
                         }
                         
-                        console.error("API Error Response:", errorDetails);
+                        // Otherwise, it fails silently here and the loop tries the next model...
 
-                        if (response.status === 400) {
-                            throw new Error(`API KEY ERROR: Make sure you put your real key in the code. (${errorDetails})`);
+                    } catch (error) {
+                        if (i === models.length - 1) {
+                            clearTimeout(timeoutId);
+                            console.error("Crash details:", error);
+                            alert("⚠️ DIAGNOSTIC ERROR:\n\n" + error.message);
+                            return null;
                         }
-                        if (response.status === 404) {
-                            throw new Error(`MODEL NOT FOUND: The model name in the code might be temporarily disabled in your region. Contact support.`);
-                        }
-                        
-                        throw new Error(`API returned ${response.status}: ${errorDetails}`);
                     }
-                    
-                    const data = await response.json();
-                    
-                    if (!data.candidates || !data.candidates[0]) {
-                        throw new Error("No output generated. Content might have been blocked by Google's safety filters.");
-                    }
-
-                    let resultText = data.candidates[0].content.parts[0].text;
-                    resultText = resultText.replace(/^```(json)?\n?/gm, '').replace(/```$/gm, '').trim();
-                    
-                    return JSON.parse(resultText);
-                    
-                } catch (error) {
-                    clearTimeout(timeoutId);
-                    console.error("Crash details:", error);
-                    alert("⚠️ DIAGNOSTIC ERROR:\n\n" + error.message);
-                    return null;
                 }
             },
 
