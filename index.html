@@ -865,6 +865,7 @@
                     
                 } catch (error) {
                     console.error("API Error:", error);
+                    this.setLoading(false);
                     this.showToast("Failed to generate prompt. Please try again.", "error");
                     return null;
                 }
