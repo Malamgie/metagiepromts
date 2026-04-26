@@ -489,7 +489,7 @@
         // ====================================================================================
         // IMPORTANT: PLACE YOUR REAL KEY HERE
         // ====================================================================================
-        const GEMINI_API_KEY = "AIzaSyCU7FPHeHJL1I464Bs3aCr98Id5Dg3v71w"; 
+        const GEMINI_API_KEY = "AIzaSyCU7FPHeHJL1I464Bs3aCr98Id5Dg3v71w"; // <-- PASTE YOUR KEY INSIDE THESE QUOTES
         // ====================================================================================
         
         const state = {
@@ -685,11 +685,15 @@
 
             // --- SMART FALLBACK API SYSTEM ---
             async callGeminiAPI(systemPrompt) {
-                // We will try the most reliable free tier model first.
-                // If it fails, we fall back to the standard flash model.
+                if (!GEMINI_API_KEY || GEMINI_API_KEY === "YOUR_API_KEY_HERE" || GEMINI_API_KEY.trim() === "") {
+                    alert("⚠️ API KEY MISSING: Please edit the index.html file and paste your Google AI Studio API key into the GEMINI_API_KEY variable.");
+                    return null;
+                }
+
+                // Try the reliable free tier model first, then the flash fallback
                 const models = [
-                    'gemini-1.5-flash-8b', // Best choice for free tier globally
-                    'gemini-1.5-flash'     // Backup
+                    'gemini-1.5-flash-8b', 
+                    'gemini-1.5-flash'     
                 ];
 
                 const controller = new AbortController();
@@ -724,7 +728,7 @@
                             }
                         }
 
-                        // If response is NOT ok, and it's our last model to try, throw the error
+                        // If NOT ok, and it's our last fallback model, alert the user
                         if (!response.ok && i === models.length - 1) {
                             let errorDetails = "";
                             try {
@@ -735,14 +739,11 @@
                             }
                             
                             if (response.status === 429) {
-                                throw new Error(`Google Cloud Account Error: You have a strict limit of 0 on your API Key for these models. You must go to Google Cloud Console, find your project, and either enable Billing or create a brand new API key from AI Studio.`);
+                                throw new Error(`Google Cloud Account Error (429): Quota exceeded. Your API key does not have free tier access for these models, or you have hit the rate limit.`);
                             }
                             
                             throw new Error(`API returned ${response.status}: ${errorDetails}`);
                         }
-                        
-                        // Otherwise, it fails silently here and the loop tries the next model...
-
                     } catch (error) {
                         if (i === models.length - 1) {
                             clearTimeout(timeoutId);
